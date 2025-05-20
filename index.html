@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ürün Listesi</title>
+</head>
+<body>
+  <h1>Ürünler</h1>
+  <ul id="product-list"></ul>
+
+  <script>
+    // Sayfa yüklenince mesaj bas
+    console.log("✅ JavaScript çalıştı.");
+
+    fetch('http://localhost:8080/api/products')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("❌ Sunucu yanıtı başarısız.");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("✅ Veri geldi:", data);
+        const list = document.getElementById('product-list');
+        data.forEach(product => {
+          const item = document.createElement('li');
+          item.textContent = `${product.title} - Stok: ${product.stockQuantity}`;
+          list.appendChild(item);
+        });
+      })
+      .catch(err => {
+        console.error("🚨 Hata oluştu:", err);
+        document.getElementById('product-list').innerHTML = "<li>Veriler alınamadı.</li>";
+      });
+  </script>
+</body>
+</html>
+
